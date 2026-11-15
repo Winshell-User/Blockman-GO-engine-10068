@@ -1,0 +1,50 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-win32:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure + build engine
+        shell: cmd
+        run: |
+          cmake -S engine-core\dev\engine -B engine-core\dev\engine\Build -G "Visual Studio 17 2022" -A Win32
+          cmake --build engine-core\dev\engine\Build --config Release
+
+      - name: Configure + build clothes
+        shell: cmd
+        run: |
+          cmake -S engine-core\dev\clothes -B engine-core\dev\clothes\Build -G "Visual Studio 17 2022" -A Win32
+          cmake --build engine-core\dev\clothes\Build --config Release
+
+      - name: Configure + build logic
+        shell: cmd
+        run: |
+          cmake -S dev\logic -B dev\logic\Build -G "Visual Studio 17 2022" -A Win32
+          cmake --build dev\logic\Build --config Release
+
+      - name: Configure + build client
+        shell: cmd
+        run: |
+          cmake -S dev\client -B dev\client\Build -G "Visual Studio 17 2022" -A Win32
+          cmake --build dev\client\Build --config Release
+
+      - name: Configure + build server
+        shell: cmd
+        run: |
+          cmake -S dev\server -B dev\server\Build -G "Visual Studio 17 2022" -A Win32
+          cmake --build dev\server\Build --config Release
+
+      - name: Upload build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: win32-build
+          path: |
+            **/Build/**/Release/**
