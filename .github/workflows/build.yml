@@ -14,31 +14,31 @@ jobs:
       - name: Configure + build engine
         shell: cmd
         run: |
-          cmake -S engine-core\dev\engine -B engine-core\dev\engine\Build -G "Visual Studio 17 2022" -A Win32
+          cmake -S engine-core\dev\engine -B engine-core\dev\engine\Build -G "Visual Studio 17 2022" -A Win32 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           cmake --build engine-core\dev\engine\Build --config Release
 
       - name: Configure + build clothes
         shell: cmd
         run: |
-          cmake -S engine-core\dev\clothes -B engine-core\dev\clothes\Build -G "Visual Studio 17 2022" -A Win32
+          cmake -S engine-core\dev\clothes -B engine-core\dev\clothes\Build -G "Visual Studio 17 2022" -A Win32 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           cmake --build engine-core\dev\clothes\Build --config Release
 
       - name: Configure + build logic
         shell: cmd
         run: |
-          cmake -S dev\logic -B dev\logic\Build -G "Visual Studio 17 2022" -A Win32
+          cmake -S dev\logic -B dev\logic\Build -G "Visual Studio 17 2022" -A Win32 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           cmake --build dev\logic\Build --config Release
 
       - name: Configure + build client
         shell: cmd
         run: |
-          cmake -S dev\client -B dev\client\Build -G "Visual Studio 17 2022" -A Win32
+          cmake -S dev\client -B dev\client\Build -G "Visual Studio 17 2022" -A Win32 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           cmake --build dev\client\Build --config Release
 
       - name: Configure + build server
         shell: cmd
         run: |
-          cmake -S dev\server -B dev\server\Build -G "Visual Studio 17 2022" -A Win32
+          cmake -S dev\server -B dev\server\Build -G "Visual Studio 17 2022" -A Win32 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
           cmake --build dev\server\Build --config Release
 
       - name: Upload build output
