@@ -74,3 +74,4 @@ LOCAL_SRC_FILES := $(GAMECLIENT_SRC_FILES)
 
 include $(BUILD_STATIC_LIBRARY)
 #---------------------------------------------------------------------------------------------
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../external/lua/src
