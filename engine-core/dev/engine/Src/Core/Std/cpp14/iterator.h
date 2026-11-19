@@ -1,6 +1,6 @@
 #ifndef __CPP14_ITERATOR_HEADER__
 #define __CPP14_ITERATOR_HEADER__
-#if __cplusplus < 201402L
+#if __cplusplus < 201402L || defined(ENGINE_CPP14_BACKPORT)
 
 namespace std
 {
