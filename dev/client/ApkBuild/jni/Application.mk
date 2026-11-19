@@ -8,7 +8,7 @@ APP_PLATFORM := android-15
 APP_STL := gnustl_shared
 
 #APP_CPPFLAGS := -std=c++11 -pthread -fexceptions -frtti -D__cplusplus=201403
-APP_CPPFLAGS := -std=c++14 -DENGINE_CPP14_BACKPORT -pthread -fexceptions -frtti -ftemplate-depth=8000
+APP_CPPFLAGS := -std=c++14 -DENGINE_CPP14_BACKPORT -include jni/android_compat.h -pthread -fexceptions -frtti -ftemplate-depth=8000
 APP_CPPFLAGS += -Wno-logical-op-parentheses -Wno-bitwise-op-parentheses -Wno-deprecated-register -Wno-shift-count-overflow -Wno-string-plus-int -Wno-tautological-compare -Wno-return-type -Wno-switch -Wno-null-conversion -Wno-delete-non-virtual-dtor -Wno-self-assign-field -Wno-empty-body -Wno-pointer-bool-conversion -Wno-unused-value -Wno-inconsistent-missing-override -Wno-constant-conversion -Wno-writable-strings -Wno-parentheses -Wno-format-security
 
 ifeq ($(NDK_DEBUG), 1)
