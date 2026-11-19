@@ -63,6 +63,7 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../engine-core/dev/libraries/src/andr
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../engine-core/dev/libraries/src/android/zippp/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../engine-core/dev/libraries/include/android/g3log/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../engine-core/dev/libraries/include/android/lua/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../../engine-core/dev/engine/Dependencies/Lua/Android/Include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../logic/dependencies/sparsehash/linux/include
 
 #LOCAL_LDLIBS := -landroid -lc -lm -ldl -llog -lEGL -lGLESv1_CM -lGLESv2
