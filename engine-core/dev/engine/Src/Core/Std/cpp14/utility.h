@@ -1,5 +1,6 @@
 #ifndef __CPP14_UTILITY_HEADER__
 #define __CPP14_UTILITY_HEADER__
+#if __cplusplus < 201402L
 #include <type_traits>
 
 namespace CPP14_UTILITY_DETAIL
@@ -123,4 +124,5 @@ namespace std {
 	using CPP14_UTILITY_DETAIL::index_sequence_for;
 }
 
+#endif
 #endif
