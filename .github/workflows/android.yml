@@ -9,18 +9,56 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Get NDK r16b
+      - name: Get NDK r16b and libs
         run: |
           curl -sSL -o ndk.zip https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip
           unzip -q ndk.zip -d $HOME
-      - name: Install libs for old NDK
-        run: sudo apt-get update && sudo apt-get install -y libncurses5 libtinfo5
-      - name: ndk-build client
-        run: rm -rf dev/client/ApkBuild/obj dev/client/ApkBuild/libs && $HOME/android-ndk-r16b/ndk-build -C dev/client/ApkBuild -j4
-      - name: Upload libs
+          sudo apt-get update && sudo apt-get install -y libncurses5 libtinfo5
+      - name: Build modules in order
+        run: |
+          set +e
+          NDK=$HOME/android-ndk-r16b
+          SHIM=$GITHUB_WORKSPACE/dev/client/ApkBuild/jni/android_compat.h
+          build() {
+            d=$1; copy=$2; name=$(echo $d | tr / _)
+            echo "=== $d"
+            rm -rf $d/obj $d/libs
+            if [ -z "$(find $d -name Application.mk)" ]; then mkdir -p $d/jni; touch $d/jni/Application.mk; fi
+            for mk in $(find $d -name Application.mk); do
+              sed -i '/^[[:space:]]*#/! s/-std=[a-z+0-9]*//g' $mk
+              printf '\nAPP_STL := gnustl_shared\nAPP_ABI := armeabi-v7a\nAPP_PLATFORM := android-15\nAPP_CPPFLAGS += -std=c++14 -DENGINE_CPP14_BACKPORT -include %s\n' $SHIM >> $mk
+            done
+            $NDK/ndk-build -C $d -j4 > build-$name.log 2>&1
+            echo "exit=$?" >> build-$name.log
+            if [ "$copy" = "copy" ]; then
+              mkdir -p $d/../Bin/release/armeabi-v7a
+              cp $d/obj/local/armeabi-v7a/*.a $d/../Bin/release/armeabi-v7a/ 2>/dev/null
+            fi
+          }
+          build engine-core/dev/libraries/ApkBuild copy
+          build engine-core/dev/engine/ApkBuild copy
+          build dev/logic/ApkBuild copy
+          build dev/client/ApkBuild copy
+          build dev/client/Shells/Android/Blockmango/app nocopy
+      - name: Upload outputs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: android-libs
-          path: dev/client/ApkBuild/libs
+          name: android-output
           if-no-files-found: warn
+          path: |
+            build-*.log
+            **/Bin/release/armeabi-v7a/*.a
+            **/libs/armeabi-v7a/*.so
+      - name: Summary and check
+        if: always()
+        run: |
+          for f in build-*.log; do
+            echo "##### $f"
+            grep -m4 -E "error:|\*\*\*|No such file|undefined reference" $f | cut -c1-220
+            tail -2 $f | cut -c1-200
+          done
+          echo "##### BlockMan wants these prebuilt files"
+          grep -n "LOCAL_SRC_FILES" dev/client/Shells/Android/Blockmango/app/jni/Android.mk | cut -c1-190
+          find . -name "libBlockMan.so" | head
+          test -n "$(find . -name libBlockMan.so | head -1)"
