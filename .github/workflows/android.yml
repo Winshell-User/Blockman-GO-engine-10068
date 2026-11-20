@@ -17,6 +17,8 @@ jobs:
       - name: Normalize windows-style includes
         run: |
           grep -rlE '^[[:space:]]*#[[:space:]]*include.*\\' engine-core/dev dev --include=*.h --include=*.hpp --include=*.cpp --include=*.c --include=*.inl 2>/dev/null | xargs -r sed -i -E '/^[[:space:]]*#[[:space:]]*include/ s#\\#/#g'
+      - name: Link client dir where the engine makefile expects it
+        run: ln -sfn $GITHUB_WORKSPACE/dev/client engine-core/dev/client
       - name: Build modules in order
         run: |
           set +e
@@ -29,7 +31,7 @@ jobs:
             if [ -z "$(find $d -name Application.mk)" ]; then mkdir -p $d/jni; touch $d/jni/Application.mk; fi
             for mk in $(find $d -name Application.mk); do
               sed -i '/^[[:space:]]*#/! s/-std=[a-z+0-9]*//g' $mk
-              printf '\nAPP_STL := gnustl_shared\nAPP_ABI := armeabi-v7a\nAPP_PLATFORM := android-15\nAPP_CPPFLAGS += -std=c++14 -DENGINE_CPP14_BACKPORT -include %s -I%s\n' $SHIM $GITHUB_WORKSPACE/engine-core/dev/engine/Dependencies/Lua/Android/Include >> $mk
+              printf '\nAPP_STL := gnustl_shared\nAPP_ABI := armeabi-v7a\nAPP_PLATFORM := android-15\nAPP_CPPFLAGS += -std=c++14 -DENGINE_CPP14_BACKPORT -include %s -I%s -I%s\n' $SHIM $GITHUB_WORKSPACE/engine-core/dev/engine/Dependencies/Lua/Android/Include $GITHUB_WORKSPACE/dev/logic/Src >> $mk
             done
             $NDK/ndk-build -C $d -j4 > build-$name.log 2>&1
             echo "exit=$?" >> build-$name.log
