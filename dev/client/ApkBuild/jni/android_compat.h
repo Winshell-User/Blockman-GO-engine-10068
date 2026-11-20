@@ -14,22 +14,15 @@ inline string to_string(double v) { char b[64]; snprintf(b, sizeof b, "%f", v); 
 inline string to_string(long double v) { char b[64]; snprintf(b, sizeof b, "%Lf", v); return b; }
 }
 #include <cstdlib>
+#include <type_traits>
 namespace std {
-inline long stol(const string& s, size_t* p = 0, int b = 10) { char* e; long v = strtol(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline unsigned long stoul(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long v = strtoul(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline long long stoll(const string& s, size_t* p = 0, int b = 10) { char* e; long long v = strtoll(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline unsigned long long stoull(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long long v = strtoull(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline int stoi(const string& s, size_t* p = 0, int b = 10) { return (int)stol(s, p, b); }
-inline double stod(const string& s, size_t* p = 0) { char* e; double v = strtod(s.c_str(), &e); if (p) *p = e - s.c_str(); return v; }
-inline float stof(const string& s, size_t* p = 0) { return (float)stod(s, p); }
-}
-#include <cstdlib>
-namespace std {
-inline long stol(const string& s, size_t* p = 0, int b = 10) { char* e; long v = strtol(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline unsigned long stoul(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long v = strtoul(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline long long stoll(const string& s, size_t* p = 0, int b = 10) { char* e; long long v = strtoll(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline unsigned long long stoull(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long long v = strtoull(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
-inline int stoi(const string& s, size_t* p = 0, int b = 10) { return (int)stol(s, p, b); }
-inline double stod(const string& s, size_t* p = 0) { char* e; double v = strtod(s.c_str(), &e); if (p) *p = e - s.c_str(); return v; }
-inline float stof(const string& s, size_t* p = 0) { return (float)stod(s, p); }
+#define COMPAT_ONLY_STRING class S, class = typename enable_if<is_same<S, string>::value>::type
+template<COMPAT_ONLY_STRING> inline long stol(const S& s, size_t* p = 0, int b = 10) { char* e; long v = strtol(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+template<COMPAT_ONLY_STRING> inline unsigned long stoul(const S& s, size_t* p = 0, int b = 10) { char* e; unsigned long v = strtoul(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+template<COMPAT_ONLY_STRING> inline long long stoll(const S& s, size_t* p = 0, int b = 10) { char* e; long long v = strtoll(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+template<COMPAT_ONLY_STRING> inline unsigned long long stoull(const S& s, size_t* p = 0, int b = 10) { char* e; unsigned long long v = strtoull(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+template<COMPAT_ONLY_STRING> inline int stoi(const S& s, size_t* p = 0, int b = 10) { char* e; long v = strtol(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return (int)v; }
+template<COMPAT_ONLY_STRING> inline double stod(const S& s, size_t* p = 0) { char* e; double v = strtod(s.c_str(), &e); if (p) *p = e - s.c_str(); return v; }
+template<COMPAT_ONLY_STRING> inline float stof(const S& s, size_t* p = 0) { char* e; float v = (float)strtod(s.c_str(), &e); if (p) *p = e - s.c_str(); return v; }
+#undef COMPAT_ONLY_STRING
 }
