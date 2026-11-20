@@ -13,3 +13,23 @@ inline string to_string(float v) { char b[64]; snprintf(b, sizeof b, "%f", v); r
 inline string to_string(double v) { char b[64]; snprintf(b, sizeof b, "%f", v); return b; }
 inline string to_string(long double v) { char b[64]; snprintf(b, sizeof b, "%Lf", v); return b; }
 }
+#include <cstdlib>
+namespace std {
+inline long stol(const string& s, size_t* p = 0, int b = 10) { char* e; long v = strtol(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline unsigned long stoul(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long v = strtoul(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline long long stoll(const string& s, size_t* p = 0, int b = 10) { char* e; long long v = strtoll(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline unsigned long long stoull(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long long v = strtoull(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline int stoi(const string& s, size_t* p = 0, int b = 10) { return (int)stol(s, p, b); }
+inline double stod(const string& s, size_t* p = 0) { char* e; double v = strtod(s.c_str(), &e); if (p) *p = e - s.c_str(); return v; }
+inline float stof(const string& s, size_t* p = 0) { return (float)stod(s, p); }
+}
+#include <cstdlib>
+namespace std {
+inline long stol(const string& s, size_t* p = 0, int b = 10) { char* e; long v = strtol(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline unsigned long stoul(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long v = strtoul(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline long long stoll(const string& s, size_t* p = 0, int b = 10) { char* e; long long v = strtoll(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline unsigned long long stoull(const string& s, size_t* p = 0, int b = 10) { char* e; unsigned long long v = strtoull(s.c_str(), &e, b); if (p) *p = e - s.c_str(); return v; }
+inline int stoi(const string& s, size_t* p = 0, int b = 10) { return (int)stol(s, p, b); }
+inline double stod(const string& s, size_t* p = 0) { char* e; double v = strtod(s.c_str(), &e); if (p) *p = e - s.c_str(); return v; }
+inline float stof(const string& s, size_t* p = 0) { return (float)stod(s, p); }
+}

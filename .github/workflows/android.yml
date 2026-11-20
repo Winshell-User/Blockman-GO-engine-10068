@@ -43,14 +43,19 @@ jobs:
           build dev/logic/ApkBuild copy
           build dev/client/ApkBuild copy
           build dev/client/Shells/Android/Blockmango/app nocopy
-      - name: Upload outputs
+      - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: android-output
+          name: android-logs
+          path: build-*.log
+      - name: Upload libs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-libs
           if-no-files-found: warn
           path: |
-            build-*.log
             **/Bin/release/armeabi-v7a/*.a
             **/libs/armeabi-v7a/*.so
       - name: Summary and check
@@ -61,6 +66,11 @@ jobs:
             grep -m4 -E "error:|\*\*\*|No such file|undefined reference" $f | cut -c1-220
             tail -2 $f | cut -c1-200
           done
+          echo "##### libraries abort context"
+          grep -B10 "Aborting" build-engine-core_dev_libraries_ApkBuild.log | cut -c1-200 | head -16
+          echo "##### UThread.h locations"
+          find . -iname "uthread.h" -not -path "./minecraft-1.6.2/*"
+          grep -n "UThread" engine-core/dev/engine/Src/Core/Log/Log.cpp
           echo "##### BlockMan wants these prebuilt files"
           grep -n "LOCAL_SRC_FILES" dev/client/Shells/Android/Blockmango/app/jni/Android.mk | cut -c1-190
           find . -name "libBlockMan.so" | head
