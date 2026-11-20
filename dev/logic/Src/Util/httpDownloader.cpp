@@ -4,6 +4,10 @@
 #include "Core.h"
 #include "Util/httpDownloader.h"
 #include "Util/PathUtil.h"
+#ifdef __ANDROID__
+constexpr int HttpDownloader::HTTP_CONNECT_TIMEOUT;
+constexpr int HttpDownloader::HTTP_TIMEOUT;
+#endif
 
 
 HttpDownloader::HttpDownloader(const std::string& url, const std::string& saveDir, const std::string& fileName,
