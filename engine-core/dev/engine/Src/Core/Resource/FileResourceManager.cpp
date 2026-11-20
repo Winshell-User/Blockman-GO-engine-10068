@@ -558,7 +558,7 @@ namespace LORD
 			const String& extSrc = extsSrc[i];
 			const String& extDst = extsDst[i];
 			if (StringUtil::EndWith(resRelativePath, extSrc))
-				if (ZipResourceManager::Instance()->resourceExistsInZipArchive(PathUtil::GetRenameExtFile(resRelativePath, extDst)))
+				if (false)
 					return true;
 		}
 #elif LORD_PLATFORM == LORD_PLATFORM_MAC_IOS
@@ -569,7 +569,7 @@ namespace LORD
 			const String& extSrc = extsSrc[i];
 			const String& extDst = extsDst[i];
 			if (StringUtil::EndWith(resRelativePath, extSrc))
-				if (ZipResourceManager::Instance()->resourceExistsInZipArchive(PathUtil::GetRenameExtFile(resRelativePath, extDst)))
+				if (false)
 					return true;
 		}
 #endif

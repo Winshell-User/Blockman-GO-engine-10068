@@ -31,7 +31,7 @@ jobs:
             if [ -z "$(find $d -name Application.mk)" ]; then mkdir -p $d/jni; touch $d/jni/Application.mk; fi
             for mk in $(find $d -name Application.mk); do
               sed -i '/^[[:space:]]*#/! s/-std=[a-z+0-9]*//g' $mk
-              printf '\nAPP_STL := gnustl_shared\nAPP_ABI := armeabi-v7a\nAPP_PLATFORM := android-15\nAPP_CPPFLAGS += -std=c++14 -DENGINE_CPP14_BACKPORT -include %s -I%s -I%s\n' $SHIM $GITHUB_WORKSPACE/engine-core/dev/engine/Dependencies/Lua/Android/Include $GITHUB_WORKSPACE/dev/logic/Src >> $mk
+              printf '\nAPP_STL := gnustl_shared\nAPP_ABI := armeabi-v7a\nAPP_PLATFORM := android-15\nAPP_CPPFLAGS += -std=c++14 -DENGINE_CPP14_BACKPORT -include %s -I%s -I%s\nAPP_CFLAGS += -I%s\n' $SHIM $GITHUB_WORKSPACE/engine-core/dev/engine/Dependencies/Lua/Android/Include $GITHUB_WORKSPACE/dev/logic/Src $GITHUB_WORKSPACE/engine-core/dev/engine/Dependencies/Lua/Android/Include >> $mk
             done
             $NDK/ndk-build -C $d -j4 > build-$name.log 2>&1
             echo "exit=$?" >> build-$name.log
