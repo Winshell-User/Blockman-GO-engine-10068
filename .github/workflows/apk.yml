@@ -57,5 +57,5 @@ jobs:
           name: apk
           if-no-files-found: warn
           path: |
-            dev/client/Shells/Android/Blockmango/app/build/outputs/apk/*.apk
+            dev/client/Shells/Android/Blockmango/app/build/outputs/**/*.apk
             gradle.log
