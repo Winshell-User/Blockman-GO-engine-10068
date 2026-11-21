@@ -583,6 +583,7 @@ public class EchoesHelper {
         void onLoadMapComplete();
 
         void onGameExit();
+        void onGameExit(String params);
 
         void runOnGLThread(final Runnable pRunnable);
     }
