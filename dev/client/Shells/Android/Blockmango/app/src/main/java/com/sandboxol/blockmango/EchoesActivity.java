@@ -389,12 +389,12 @@ public class EchoesActivity extends Activity implements EchoesHelperListener {
 
     public String getResPath() {
         //return getSDCardPath() + "/" + ASSETS_NAME + "/";
-        return getDir(ASSETS_NAME, MODE_PRIVATE).getPath() + "/";
+        File ext = getExternalFilesDir(null); if (ext == null) { return getDir(ASSETS_NAME, MODE_PRIVATE).getPath() + "/"; } File d = new File(ext, ASSETS_NAME); d.mkdirs(); return d.getPath() + "/";
     }
 
     private String getSDCardPath() {
         boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
-        return (sdCardExist ? new File(Environment.getExternalStorageDirectory(), "SandBoxOL/BlockMan").getPath() : getDir("BlockMan", MODE_PRIVATE).getPath());
+        return (sdCardExist ? new File(getExternalFilesDir(null) != null ? getExternalFilesDir(null) : Environment.getExternalStorageDirectory(), "BlockMan").getPath() : getDir("BlockMan", MODE_PRIVATE).getPath());
     }
 
     public String getMapPath() {
@@ -582,7 +582,7 @@ public class EchoesActivity extends Activity implements EchoesHelperListener {
 
     private void doCopyResAndCheckUpdate() {
         // copy resource
-        if (checkNeedCopy()) {
+        if (false) {
             //delete old res
             delFolder(mResPath);
             m_nCopyedFileCount = 0;
